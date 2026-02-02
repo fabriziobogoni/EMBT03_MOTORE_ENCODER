@@ -4,6 +4,8 @@
 int puls;
 int pulsState = 0;
 int ledState = 0;
+int motState = 0;
+int motSpeed = 0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -15,27 +17,33 @@ void setup() {
 
 void loop() {
   puls = digitalRead(PULS_PIN);
-  //Serial.print(puls);
-  //Serial.print(" ,");
   
   if(puls == HIGH && pulsState == LOW){
     if(ledState == LOW){
       ledState = HIGH;
+      motState = HIGH;
+      for(motSpeed = 0; motSpeed <= 255; motSpeed++){
+        analogWrite(MOTOR_PIN, motSpeed);
+        delay(10);
+      }
     } else {
       ledState = LOW;
+      motState = LOW;
+      for(motSpeed = 255; motSpeed >= 0; motSpeed--){
+        analogWrite(MOTOR_PIN, motSpeed);
+        delay(10);
+      }
+
     }
     Serial.println(ledState);
     digitalWrite(LED_PIN, ledState);
-    digitalWrite(MOTOR_PIN, ledState);
+    
   }
   pulsState = puls;
  
-  // put your main code here, to run repeatedly:
-  
-  //digitalWrite(LED_PIN, ledState);
-  
 
-  delay(100);
+  
+  delay(10);
   
   
 }
